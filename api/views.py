@@ -18,6 +18,11 @@ class DiplomeList(generics.ListCreateAPIView):
     queryset = Diplome.objects.all().prefetch_related()
     serializer_class = diplome_serializer
 
+
+class DiplomeList(generics.ListCreateAPIView):
+    queryset = Diplome.objects.all().prefetch_related()
+    serializer_class = diplome_serializer
+
 @authentication_classes([SessionAuthentication, BasicAuthentication])
 @permission_classes([IsAuthenticated])
 class DiplomeDetail(mixins.RetrieveModelMixin,

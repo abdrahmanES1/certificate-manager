@@ -22,10 +22,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-btk7okzx^#_4xjx%2w)lw+oua05r_t797jg+wc6e&47&-wwky@'
+SECRET_KEY = os.environ.get('TOKEN_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
-    'app',
+    'app'
 ]
 
 REST_FRAMEWORK = {
@@ -102,7 +102,6 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 
@@ -125,7 +124,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'fr-Fr'
 
 TIME_ZONE = 'UTC'
 
@@ -142,7 +141,7 @@ STATIC_URL = 'static/'
 STATICURL_DIRS = [
     os.path.join(BASE_DIR, 'project/static'),
     os.path.join(BASE_DIR, 'api/static'),
-    os.path.join(BASE_DIR, 'app/static')
+    os.path.join(BASE_DIR, 'app/static'),
 ]
 
 

@@ -1,1 +1,6 @@
-GET http://localhost:8000/api/diplomes
+GET  http://localhost:8000/api/diplomes HTTP/1.1
+Content-Type: application/json;
+
+{
+    "num_classment": 9,
+}

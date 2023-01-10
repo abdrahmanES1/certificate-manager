@@ -1,9 +1,6 @@
-from django.db import models
-from django.contrib import admin
-
 # Create your models here.
 from django.db import models
-# from .validators import validate_file_excel_extension
+from django.contrib import admin
 # Create your models here.
 
 class Filiere(models.Model):
@@ -27,11 +24,8 @@ class Etudiant(models.Model):
     def __str__(self) -> str:
         return f"{self.CNI}, {self.nom}, {self.prenom}"
 
-class EtudiantAdmin(admin.ModelAdmin):
-    model = Etudiant
-    list_display = ["CNI", "nom", 'prenom', 'filiere']
-    search_fields = ["CNI", "nom"]
-    list_filter = ["filiere"]
+
+
 
 
 class TypeDiplome(models.Model):
@@ -50,7 +44,7 @@ satut_diplome_choices = [
 
 
 class Diplome(models.Model):
-    num_classment = models.IntegerField(auto_created=True)
+    num_classment = models.IntegerField()
     etudient = models.ForeignKey(Etudiant, on_delete=models.CASCADE, verbose_name="etudient")
     filiere = models.ForeignKey(Filiere, on_delete=models.CASCADE, verbose_name="filiere")
     type_diplome = models.ForeignKey(
@@ -59,27 +53,58 @@ class Diplome(models.Model):
     createdAt = models.DateTimeField(auto_now_add=True, blank=True)
 
     list_display = ["num_classment", "etudient"]
-
+    def __str__(self) -> str:
+        return f'{self.etudient.nom} |  {self.etudient.CNI} | {self.type_diplome.type} | {self.filiere.nom}'
     class Meta:
-        unique_together = ('etudient', 'filiere', 'type_diplome',)
-        
+        unique_together = [('etudient', 'filiere', 'type_diplome',),
+                           ('num_classment', 'filiere', 'type_diplome',)]
+
+    
+    def save(self, *args, **kwargs):
+        if  not self.num_classment:
+            last = Diplome.objects.filter(filiere_id=4, type_diplome_id=2).aggregate(models.Max('num_classment'))
+            if last['num_classment__max'] is None:
+                self.num_classment = 1
+            else:
+                self.num_classment = last['num_classment__max'] + 1
+
+        super().save(*args, **kwargs)
     # def __str__(self) -> str:
     #     return f"{self.num_classment}, {self.etudient}, {self.filiere}, {self.type_diplome}"
 
 
-# @admin.action(description='test action')
-# def make_publication(DiplomeAdmin, request, queryset):
-#     queryset.update(type_diplome=1)
+
+
+
+
+
+
+
 
 class DiplomeAdmin(admin.ModelAdmin):
     model = Diplome
     list_display = ['num_classment', 'etudient', 'filiere', 'type_diplome', 'statut',]
     ordering = ['num_classment',]
-    search_fields = ('num_classment', )
+    search_fields = ('etudient__CNI',)
     list_filter = ('type_diplome', 'filiere', 'createdAt')
-    # actions = (make_publication,)
 
 
+    @admin.action(description='print')
+    def print_list_diplome(DiplomeAdmin, request, queryset):
+        return 
+        queryset.update(type_diplome=1)
+
+    actions = (print_list_diplome,)
 
 
+class DiplomeInline(admin.TabularInline):
+    model = Diplome
+    fields = ['filiere', 'type_diplome', 'statut',]
+    extra = 2
 
+class EtudiantAdmin(admin.ModelAdmin):
+    model = Etudiant
+    list_display = ["CNI", "nom", 'prenom', 'filiere']
+    search_fields = ["CNI", "nom"]
+    list_filter = ["filiere"]
+    inlines = [DiplomeInline]
