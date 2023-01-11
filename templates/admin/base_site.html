@@ -1,5 +1,18 @@
 {% extends "admin/base_site.html" %}
 {% load static %}
+{% load i18n %}
 {% block extrahead %}
-    <link rel="shortcut icon" type="image/png" href="{% static '/img/cropped-logo-32x32.jpeg' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static '/app/img/cropped-logo-32x32.jpeg' %}">
 {% endblock %}
+
+
+ {% block branding %}
+ <div style="display:flex; align-items:baseline; flew-wrap:wrap">
+    <h1 id="site-name" >
+        <a href="{% url 'admin:index' %}">Administration de Django</a>
+    </h1>
+    <span>
+    {% trans "created by" %} <a href="https://abderrahman-essebyity.vercel.app/">Abdrahman es</a>
+    </span>
+</div>
+{% endblock %} 

@@ -8,6 +8,9 @@ django = "*"
 python-dotenv = "*"
 mysqlclient = "*"
 djangorestframework = "*"
+django-import-export = "*"
+
+
 [dev-packages]
 
 [requires]

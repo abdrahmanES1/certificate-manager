@@ -1,6 +1,7 @@
 # Create your models here.
 from django.db import models
 from django.contrib import admin
+
 # Create your models here.
 
 class Filiere(models.Model):
@@ -10,10 +11,6 @@ class Filiere(models.Model):
         return self.nom
 
 
-class FiliereAdmin(admin.ModelAdmin):
-    model = Filiere
-    list_display =  ["nom"]
-    search_fields = ["nom"]
 
 class Etudiant(models.Model):
     CNI = models.CharField(primary_key=True, max_length=10)
@@ -73,38 +70,3 @@ class Diplome(models.Model):
     #     return f"{self.num_classment}, {self.etudient}, {self.filiere}, {self.type_diplome}"
 
 
-
-
-
-
-
-
-
-
-class DiplomeAdmin(admin.ModelAdmin):
-    model = Diplome
-    list_display = ['num_classment', 'etudient', 'filiere', 'type_diplome', 'statut',]
-    ordering = ['num_classment',]
-    search_fields = ('etudient__CNI',)
-    list_filter = ('type_diplome', 'filiere', 'createdAt')
-
-
-    @admin.action(description='print')
-    def print_list_diplome(DiplomeAdmin, request, queryset):
-        return 
-        queryset.update(type_diplome=1)
-
-    actions = (print_list_diplome,)
-
-
-class DiplomeInline(admin.TabularInline):
-    model = Diplome
-    fields = ['filiere', 'type_diplome', 'statut',]
-    extra = 2
-
-class EtudiantAdmin(admin.ModelAdmin):
-    model = Etudiant
-    list_display = ["CNI", "nom", 'prenom', 'filiere']
-    search_fields = ["CNI", "nom"]
-    list_filter = ["filiere"]
-    inlines = [DiplomeInline]
