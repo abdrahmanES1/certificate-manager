@@ -11,7 +11,7 @@ djangorestframework = "*"
 django-import-export = "*"
 gunicorn = "*"
 whitenoise = "*"
-
+psycopg2 = "*"
 
 [dev-packages]
 
