@@ -1,4 +1,3 @@
 # build_files.sh
-pipenv install
-pipenv shell
+pip install -r requirements.txt
 python3.9 manage.py collectstatic
